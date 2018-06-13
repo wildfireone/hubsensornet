@@ -4,7 +4,7 @@ function client {
     
     echo begining config
     
-    if [ -z $( cat /etc/wpa_supplicant/wpa_supplicant.conf | grep 'ssid="pihost"' ) ]; then
+    if ! grep -qe 'ssid="pihost"' /etc/wpa_supplicant/wpa_supplicant.conf; then
         echo adding wifi config
         echo -e 'country=GB\n\nnetwork={\n ssid="pihost"\n psk="thereoncewasapi"\n}' >> /dev/null # /etc/wpa_supplicant/wpa_supplicant.conf
     else
@@ -12,7 +12,7 @@ function client {
         sudo sed 's/ssid=.*/ssid="pihost"/' /etc/wpa_supplicant/wpa_supplicant.conf
         sudo sed 's/psk=.*/psk="thereoncewasapi"/' /etc/wpa_supplicant/wpa_supplicant.conf
     fi
-    
+    finish
 }
 
 function server {
@@ -24,6 +24,7 @@ function server {
     fi
     ap
     #	dock
+    finish
 }
 
 function ap {
@@ -32,14 +33,14 @@ function ap {
     sudo systemctl stop dnsmasq
     sudo systemctl stop hostapd
     
-    echo "interface wlan0\n static ip_address=192.168.4.1/24" >> /etc/dhcpcd.conf
+    echo -e "interface wlan0\\n static ip_address=192.168.4.1/24" >> /etc/dhcpcd.conf
     sudo service dhcpcd restart
     
     sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
     
-    echo -e "interface=wlan0\ndhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h" >> /etc/dnsmasq.conf
+    echo -e "interface=wlan0\\ndhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h" >> /etc/dnsmasq.conf
     
-    echo -e "interface=wlan0\ndriver=nl80211\nssid=NameOfNetwork\nhw_mode=g\nchannel=7\nwmm_enabled=0\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\nwpa=2\nwpa_passphrase=AardvarkBadgerHedgehog\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP\n"
+    echo -e "interface=wlan0\\ndriver=nl80211\\nssid=pihost\\nhw_mode=g\\nchannel=7\\nwmm_enabled=0\\nmacaddr_acl=0\\nauth_algs=1\\nignore_broadcast_ssid=0\\nwpa=2\\nwpa_passphrase=thereoncewasapi\\nwpa_key_mgmt=WPA-PSK\\nwpa_pairwise=TKIP\\nrsn_pairwise=CCMP\\n"
     
     sudo sed -i 's*#DAEMON_CONF=""*DAEMON_CONF="/etc/hostapd/hostapd.conf"*' /etc/default/hostapd
     
