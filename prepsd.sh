@@ -14,7 +14,13 @@ if ! lsblk | grep -q mmcblk0 ; then
     exit 1
 fi
 
-sudo dd if=~/2018-04-18-raspbian-stretch-lite.img bs=4M of=/dev/mmcblk0 status=progress && sync
+echo -e "this will erase all data on the sd card, are you sure?\n"
+read -p "Are you sure? " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    sudo dd if="*-raspbian-stretch-lite.img" bs=4M of=/dev/mmcblk0 status=progress && sync
+else
+    exit 1
+fi
 
 #
 sudo mkdir -p /mnt/sd/boot
@@ -24,7 +30,8 @@ sudo mount /dev/mmcblk0p1 /mnt/sd/boot
 sudo mount /dev/mmcblk0p2 /mnt/sd/root
 
 sudo touch /mnt/sd/boot/ssh
-
-sudo echo -e "if [ -e /setup.sh ]; then sudo bash /setup.sh $1 && sudo rm /setup.sh; fi" >> /mnt/sd/root/etc/rc.local
+echo -e "if [ -e /setup.sh ]; then sudo bash /setup.sh $1 && sudo rm /setup.sh; fi" | sudo tee -a /mnt/sd/root/etc/rc.local
 sudo cp ./setup.sh /mnt/sd/root/
 
+sudo umount /mnt/sd/boot
+sudo umount /mnt/sd/root
