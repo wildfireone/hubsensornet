@@ -9,6 +9,11 @@ if [ ! -a "*-raspbian-stretch-lite.img" ]; then
     fi
 fi
 
+if ! lsblk | grep -q mmcblk0 ; then
+    echo "no sd card found please plug one in"
+    exit 1
+fi
+
 sudo dd if=~/2018-04-18-raspbian-stretch-lite.img bs=4M of=/dev/mmcblk0 status=progress && sync
 
 #
