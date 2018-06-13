@@ -1,6 +1,17 @@
+#!/bin/bash
+
+if [ ! -a "*-raspbian-stretch-lite.img" ]; then
+    if [ -a "*-raspbian-stretch-lite.zip" ]; then
+        unzip "*-raspbian-stretch-lite.zip"
+    else
+        wget -q --show-progress https://downloads.raspberrypi.org/raspbian_lite_latest
+        unzip "*-raspbian-stretch-lite.zip"
+    fi
+fi
 
 sudo dd if=~/2018-04-18-raspbian-stretch-lite.img bs=4M of=/dev/mmcblk0 status=progress && sync
 
+#
 if [ ! -d /mnt/sd ]; then
     sudo mkdir /mnt/sd/boot
     sudo mkdir /mnt/sd/root
