@@ -14,26 +14,31 @@ if ! lsblk | grep -q mmcblk0 ; then
     exit 1
 fi
 
-echo "this will erase all data on the sd card, are you sure?"
-read -p "Are you sure? " -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    sudo dd if=2018-04-18-raspbian-stretch-lite.img bs=4M of=/dev/mmcblk0 status=progress && sync
-else
-    exit 1
-fi
+# echo "this will erase all data on the sd card, are you sure?"
+# read -p "Are you sure? " -n 1 -r
+# if [[ $REPLY =~ ^[Yy]$ ]]; then
+#     sudo dd if=2018-04-18-raspbian-stretch-lite.img bs=4M of=/dev/mmcblk0 status=progress && sync
+# else
+#     exit 1
+# fi
 
 echo -e "creating directories\\n"
-if [ -d /mnt/sd/boot ]; then sudo mkdir -p /mnt/sd/boot; fi
-if [ -d /mnt/sd/root ]; then sudo mkdir /mnt/sd/root; fi
+if [ ! -d /mnt/sd/boot ]; then sudo mkdir -p /mnt/sd/boot; fi
+if [ ! -d /mnt/sd/root ]; then sudo mkdir /mnt/sd/root; fi
 
 echo -e "mounting drives\\n"
 sudo mount /dev/mmcblk0p1 /mnt/sd/boot
 sudo mount /dev/mmcblk0p2 /mnt/sd/root
 
+sleep 1
+
 echo -e "moving files\\n"
 sudo touch /mnt/sd/boot/ssh
-echo -e "if [ -e /setup.sh ]; then sudo bash /setup.sh $1 && sudo rm /setup.sh; fi" | sudo tee -a /mnt/sd/root/etc/rc.local >> /dev/null
+sudo sed -i '$iif [ -e /setup.sh ]; then sudo bash /setup.sh 0 && sudo rm /setup.sh; fi' /mnt/sd/root/etc/rc.local
 sudo cp ./setup.sh /mnt/sd/root/
+
+sleep 1
+sync
 
 echo "unmounting drives"
 sudo umount /mnt/sd/boot
