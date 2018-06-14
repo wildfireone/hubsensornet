@@ -65,7 +65,6 @@ function finish {
     echo "pi:pi" | sudo chpasswd
     
     echo rebooting
-    sudo reboot
 }
 
 if [ "$1" == "0" ]; then

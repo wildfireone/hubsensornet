@@ -34,7 +34,7 @@ sleep 1
 
 echo -e "moving files\\n"
 sudo touch /mnt/sd/boot/ssh
-sudo sed -i '$iif [ -e /setup.sh ]; then sudo bash /setup.sh 0 && sudo rm /setup.sh; fi' /mnt/sd/root/etc/rc.local
+sudo sed -i '$iif [ -e /setup.sh ]; then sudo bash /setup.sh 0 && sudo rm /setup.sh && sudo reboot; fi' /mnt/sd/root/etc/rc.local
 sudo cp ./setup.sh /mnt/sd/root/
 
 sleep 1
