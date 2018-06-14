@@ -4,9 +4,9 @@ function client {
     
     echo begining config
     
-    if ! grep -qe 'ssid="pihost"' /etc/wpa_supplicant/wpa_supplicant.conf; then
+    if ! grep -e 'network={' /etc/wpa_supplicant/wpa_supplicant.conf; then
         echo adding wifi config
-        echo -e 'country=GB\n\nnetwork={\n ssid="pihost"\n psk="thereoncewasapi"\n}' >> /dev/null # /etc/wpa_supplicant/wpa_supplicant.conf
+        echo -e 'country=GB\n\nnetwork={\n ssid="pihost"\n psk="thereoncewasapi"\n}' | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null
     else
         echo wifi config already found, updating
         sudo sed 's/ssid=.*/ssid="pihost"/' /etc/wpa_supplicant/wpa_supplicant.conf
