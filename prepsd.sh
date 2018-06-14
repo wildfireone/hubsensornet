@@ -14,13 +14,14 @@ if ! lsblk | grep -q mmcblk0 ; then
     exit 1
 fi
 
-# echo "this will erase all data on the sd card, are you sure?"
-# read -p "Are you sure? " -n 1 -r
-# if [[ $REPLY =~ ^[Yy]$ ]]; then
-#     sudo dd if=2018-04-18-raspbian-stretch-lite.img bs=4M of=/dev/mmcblk0 status=progress && sync
-# else
-#     exit 1
-# fi
+echo "this will erase all data on the sd card, are you sure?"
+read -p "Are you sure? " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    sudo dd if=2018-04-18-raspbian-stretch-lite.img bs=4M of=/dev/mmcblk0 status=progress && sync
+else
+    echo a
+    # exit 1
+fi
 
 echo -e "creating directories\\n"
 if [ ! -d /mnt/sd/boot ]; then sudo mkdir -p /mnt/sd/boot; fi
