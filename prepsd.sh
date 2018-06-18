@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ "$1" = "1" ]; then
+    a=$1
+else
+    echo "no choice made, defaulting to client(0)"
+    a=0
+fi
+
 if [ ! -f 2018-04-18-raspbian-stretch-lite.img ]; then
     if [ ! -f 2018-04-18-raspbian-stretch-lite.zip ]; then
         echo -e "no image or zip found, getting from raspberrypi.org\\n"
@@ -35,7 +42,7 @@ sleep 1
 
 echo -e "moving files\\n"
 sudo touch /mnt/sd/boot/ssh
-sudo sed -i '$iif [ -e /setup.sh ]; then sudo bash /setup.sh 0 && sudo rm /setup.sh && sudo reboot; fi' /mnt/sd/root/etc/rc.local
+sudo sed -i "\$iif [ -e /setup.sh ]; then sudo bash /setup.sh $a && sudo rm /setup.sh && sudo reboot; fi" /mnt/sd/root/etc/rc.local
 sudo cp ./setup.sh /mnt/sd/root/
 
 sleep 1
