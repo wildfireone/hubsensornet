@@ -23,7 +23,7 @@ function server {
 		exit 1
 	fi
 	ap
-	# dock
+	dock
 	finish
 }
 
