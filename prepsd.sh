@@ -3,15 +3,18 @@
 if [ "$1" = "1" ]; then
     a=$1
     name="pihost"
+    echo "server $name"
     elif [ "$1" = "0" ]; then
     a=$1
-    if [ -z "$2" ]; then
-        echo "please supply a number for the pi"
-        elif [[ $(($2)) != $2 ]]; then
+    if [[ "$2" =~ ^[0-9]+$ ]]; then
         name=pitest$2
+        echo "client $name"
+    else
+        echo "choose a number for the client pi"
+        exit 1
     fi
 else
-    echo "no choice made, defaulting to client(0)"
+    echo "no choice made, choose client(0) or server(1)"
     exit 1
 fi
 
