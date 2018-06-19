@@ -29,7 +29,7 @@ function server {
 
 function ap {
     echo "intsalling software"
-    sudo apt install dnsmasq hostapd
+    sudo apt install -y dnsmasq hostapd
     sudo systemctl stop dnsmasq
     sudo systemctl stop hostapd
     
