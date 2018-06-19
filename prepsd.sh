@@ -54,8 +54,8 @@ sleep 1
 echo -e "moving files\\n"
 sudo touch /mnt/sd/boot/ssh
 sudo sed -i "\$iif [ -e /setup.sh ]; then sudo bash /setup.sh $a && sudo rm /setup.sh && sudo reboot; fi" /mnt/sd/root/etc/rc.local
-echo "$name" | sudo tee /etc/hostname > /dev/null
-sudo sed -i "s/raspberrypi/$name/" /etc/hosts
+echo "$name" | sudo tee /mnt/sd/root/etc/hostname > /dev/null
+sudo sed -i "s/raspberrypi/$name/" /mnt/sd/root/etc/hosts
 sudo cp ./setup.sh /mnt/sd/root/
 
 sleep 1
