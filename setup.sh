@@ -30,22 +30,21 @@ function server {
 function ap {
     echo "intsalling software"
     sudo apt install -y dnsmasq hostapd
-    sudo systemctl stop dnsmasq
-    sudo systemctl stop hostapd
+    sudo systemctl stop dnsmasq hostapd
     
     echo -e "interface wlan0\\n static ip_address=192.168.4.1/24" >> /etc/dhcpcd.conf
     sudo service dhcpcd restart
     
     sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
     
-    echo -e "interface=wlan0\\ndhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h" >> /etc/dnsmasq.conf
+    sudo touch /etc/dnsmasq.conf
+    echo -e "interface=wlan0\\ndhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h" | sudo tee /etc/dnsmasq.conf > /dev/null
     
-    echo -e "interface=wlan0\\ndriver=nl80211\\nssid=pihost\\nhw_mode=g\\nchannel=7\\nwmm_enabled=0\\nmacaddr_acl=0\\nauth_algs=1\\nignore_broadcast_ssid=0\\nwpa=2\\nwpa_passphrase=thereoncewasapi\\nwpa_key_mgmt=WPA-PSK\\nwpa_pairwise=TKIP\\nrsn_pairwise=CCMP\\n"
+    echo -e "interface=wlan0\\ndriver=nl80211\\nssid=pihost\\nhw_mode=g\\nchannel=7\\nwmm_enabled=0\\nmacaddr_acl=0\\nauth_algs=1\\nignore_broadcast_ssid=0\\nwpa=2\\nwpa_passphrase=thereoncewasapi\\nwpa_key_mgmt=WPA-PSK\\nwpa_pairwise=TKIP\\nrsn_pairwise=CCMP\\n" | sudo tee /etc/hostapd/hostapd.conf > /dev/null
     
     sudo sed -i 's*#DAEMON_CONF=""*DAEMON_CONF="/etc/hostapd/hostapd.conf"*' /etc/default/hostapd
     
-    sudo systemctl start hostapd
-    sudo systemctl start dnsmasq
+    sudo systemctl start hostapd dnsmasq
     
     sudo sed -i "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/" /etc/sysctl.conf
     
@@ -62,10 +61,13 @@ function dock {
     
     docker network create pinet
     
-    docker create --name pidb --always-restart --network pinet -p 8086:8086 influxdb
-    docker create --name piui --always-restart --network pinet -p 3000:3000 fg2it/grafana-armhf:v5.1.3
+    docker create --name pidb --restart=always --network pinet -p 8086:8086 influxdb
+    docker create --name piui --restart=always --network pinet -p 3000:3000 fg2it/grafana-armhf:v5.1.3
     
     docker start pidb piui
+    
+    sleep 10
+    curl -G 'http://localhost:8086/query' --data-urlencode "q=create database test"
 }
 
 function finish {
@@ -83,3 +85,5 @@ else
     echo "choose either client (0) or server(1)"
     exit 1
 fi
+
+exit 0
