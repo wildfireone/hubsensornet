@@ -18,10 +18,22 @@ elif (search(r'pitest\d', gethostname(), 0)):
 else:
     end = "pihost"
 
-# create db client
-db = InfluxDBClient(host=end, database="test")
 
-while True:
+db = None
+while db is None:
+    # create db client
+    db = InfluxDBClient(host=end, database="test")
+    try:
+        # if there is no db running on endpoint this will error
+        db.get_list_database()
+    except KeyboardInterrupt:
+        exit
+    except Exception as e:
+        db = None
+        sleep(60)
+
+print("database found sending data")
+while db is not None:
     h, t = None, None
     if s is not None:
         h, t = read_retry(s, p)
