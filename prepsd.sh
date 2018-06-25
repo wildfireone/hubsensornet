@@ -38,7 +38,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     sudo dd if=2018-04-18-raspbian-stretch-lite.img bs=4M of=/dev/mmcblk0 status=progress && sync
 else
     echo a
-    # exit 1
+    exit 1
 fi
 
 echo -e "creating directories\\n"
