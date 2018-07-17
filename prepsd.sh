@@ -53,6 +53,7 @@ sleep 1
 
 echo -e "moving files\\n"
 sudo touch /mnt/sd/boot/ssh
+sudo cp wpa_supplicant.conf /mnt/sd/boot/
 # sudo sed -i "\$iif [ -e /setup.sh ]; then sudo bash /setup.sh $a if [ $? -eq 0 ]; then sudo rm /setup.sh && sudo reboot; fi elif [ -e /setup2.sh ]; then sudo bash /setup2.sh $a && sudo rm /setup2.sh && sudo reboot; fi" /mnt/sd/root/etc/rc.local
 sudo sed -i "\$iif [ -e /setup.sh ]; then sudo bash /setup.sh $a && sudo rm /setup.sh && sudo reboot; elif [ -e /setup2.sh ]; then sudo bash /setup2.sh $a && sudo rm /setup2.sh && sudo reboot; fi" /mnt/sd/root/etc/rc.local
 echo "$name" | sudo tee /mnt/sd/root/etc/hostname > /dev/null
