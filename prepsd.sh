@@ -18,13 +18,13 @@ else
     exit 1
 fi
 
-if [ ! -f 2018-04-18-raspbian-stretch-lite.img ]; then
-    if [ ! -f 2018-04-18-raspbian-stretch-lite.zip ]; then
+if [ ! -f 2018-06-27-raspbian-stretch-lite.img ]; then
+    if [ ! -f 2018-06-27-raspbian-stretch-lite.zip ]; then
         echo -e "no image or zip found, getting from raspberrypi.org\\n"
         wget -q --show-progress --content-disposition "https://downloads.raspberrypi.org/raspbian_lite_latest"
     fi
     echo -e "zip found, unpacking\\n"
-    unzip 2018-04-18-raspbian-stretch-lite.zip
+    unzip 2018-06-27-raspbian-stretch-lite.zip
 fi
 
 if ! lsblk | grep -q mmcblk0 ; then
@@ -35,7 +35,7 @@ fi
 echo "this will erase all data on the sd card, are you sure?"
 read -p "Are you sure? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    sudo dd if=2018-04-18-raspbian-stretch-lite.img bs=4M of=/dev/mmcblk0 status=progress && sync
+    sudo dd if=2018-06-27-raspbian-stretch-lite.img bs=4M of=/dev/mmcblk0 status=progress && sync
 else
     echo a
     exit 1
