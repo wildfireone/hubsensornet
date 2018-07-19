@@ -27,17 +27,28 @@ if [ ! -f 2018-06-27-raspbian-stretch-lite.img ]; then
     unzip 2018-06-27-raspbian-stretch-lite.zip
 fi
 
+
 if ! lsblk | grep -q mmcblk0 ; then
-    echo "no sd card found please plug one in"
-    exit 1
+    echo "no sd card detected"
+    lsblk | grep -e "disk"
+    while [ "$drive" = "" ] ; do
+        read -p "Please specify drive: /dev/"
+        if lsblk | grep -e "disk" | grep -e $REPLY > /dev/null ; then
+            drive="/dev/$REPLY"
+        else
+            echo "please select an appropriate device"
+        fi
+    done
+else
+    drive="/dev/mmcblk0"
 fi
 
-echo "this will erase all data on the sd card, are you sure?"
-read -p "Are you sure? " -n 1 -r
+echo "this will erase all data on $drive, are you sure?"
+read -p "Are you sure? " -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    sudo dd if=2018-06-27-raspbian-stretch-lite.img bs=4M of=/dev/mmcblk0 status=progress && sync
+    sudo umount $drive $drive\1 $drive\2 $drive\p1 $drive\p2 2> /dev/null
+    sudo dd if=2018-06-27-raspbian-stretch-lite.img bs=4M of=$drive status=progress && sync
 else
-    echo a
     exit 1
 fi
 
@@ -45,16 +56,18 @@ echo -e "creating directories\\n"
 if [ ! -d /mnt/sd/boot ]; then sudo mkdir -p /mnt/sd/boot; fi
 if [ ! -d /mnt/sd/root ]; then sudo mkdir /mnt/sd/root; fi
 
+if ! echo $drive | grep -e "sd" ; then
+    $drive=$drive\p
+fi
 echo -e "mounting drives\\n"
-sudo mount /dev/mmcblk0p1 /mnt/sd/boot
-sudo mount /dev/mmcblk0p2 /mnt/sd/root
+sudo mount $drive\1 /mnt/sd/boot
+sudo mount $drive\2 /mnt/sd/root
 
 sleep 1
 
 echo -e "moving files\\n"
 sudo touch /mnt/sd/boot/ssh
 sudo cp wpa_supplicant.conf /mnt/sd/boot/
-# sudo sed -i "\$iif [ -e /setup.sh ]; then sudo bash /setup.sh $a if [ $? -eq 0 ]; then sudo rm /setup.sh && sudo reboot; fi elif [ -e /setup2.sh ]; then sudo bash /setup2.sh $a && sudo rm /setup2.sh && sudo reboot; fi" /mnt/sd/root/etc/rc.local
 sudo sed -i "\$iif [ -e /setup.sh ]; then sudo bash /setup.sh $a && sudo rm /setup.sh && sudo reboot; elif [ -e /setup2.sh ]; then sudo bash /setup2.sh $a && sudo rm /setup2.sh && sudo reboot; fi" /mnt/sd/root/etc/rc.local
 echo "$name" | sudo tee /mnt/sd/root/etc/hostname > /dev/null
 sudo sed -i "s/raspberrypi/$name/" /mnt/sd/root/etc/hosts
