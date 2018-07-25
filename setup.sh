@@ -6,11 +6,16 @@ function client {
 
 function server {
     # check internet, cant use ping as its blocked in eduroam
-    wget -q --spider www.google.com
-    if [ $? -eq 1 ]; then
-        echo "no internet, exiting"
-        exit 1
-    fi
+    net=false
+    while $net ; do
+        wget -q --spider www.google.com
+        if [ $? -eq 1 ]; then
+            echo "no internet waiting 5 then trying again"
+            sleep 5
+        else
+            net=true
+        fi
+    done
     ap
     dock
     finish

@@ -32,8 +32,8 @@ if ! lsblk | grep -q mmcblk0 ; then
     echo "no sd card detected"
     lsblk | grep -e "disk"
     while [ "$drive" = "" ] ; do
-        read -p "Please specify drive: /dev/"
-        if lsblk | grep -e "disk" | grep -e $REPLY > /dev/null ; then
+        read -r -p "Please specify drive: /dev/"
+        if lsblk | grep -e "disk" | grep -e "$REPLY" > /dev/null ; then
             drive="/dev/$REPLY"
         else
             echo "please select an appropriate device"
@@ -57,7 +57,7 @@ if [ ! -d /mnt/sd/boot ]; then sudo mkdir -p /mnt/sd/boot; fi
 if [ ! -d /mnt/sd/root ]; then sudo mkdir /mnt/sd/root; fi
 
 if ! echo $drive | grep -e "sd" ; then
-    $drive=$drive\p
+    drive=$drive\p
 fi
 echo -e "mounting drives\\n"
 sudo mount $drive\1 /mnt/sd/boot
