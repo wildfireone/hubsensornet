@@ -30,7 +30,7 @@ fi
 
 if ! lsblk | grep -q mmcblk0 ; then
     echo "no sd card detected"
-    lsblk | grep -e "disk"
+    lsblk | grep -e "disk" | grep -v "sda"
     while [ "$drive" = "" ] ; do
         read -r -p "Please specify drive: /dev/"
         if lsblk | grep -e "disk" | grep -e "$REPLY" > /dev/null ; then
@@ -47,10 +47,12 @@ echo "this will erase all data on $drive, are you sure?"
 read -p "Are you sure? " -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     sudo umount $drive $drive\1 $drive\2 $drive\p1 $drive\p2 2> /dev/null
-    sudo dd if=2018-06-27-raspbian-stretch-lite.img bs=4M of=$drive status=progress && sync
+    sudo dd if=2018-06-27-raspbian-stretch-lite.img bs=4M of=$drive status=progress && sudo sync
 else
     exit 1
 fi
+
+sleep 1
 
 echo -e "creating directories\\n"
 if [ ! -d /mnt/sd/boot ]; then sudo mkdir -p /mnt/sd/boot; fi
@@ -70,12 +72,12 @@ sudo touch /mnt/sd/boot/ssh
 sudo cp wpa_supplicant.conf /mnt/sd/boot/
 sudo sed -i "\$iif [ -e /setup.sh ]; then sudo bash /setup.sh $a && sudo rm /setup.sh && sudo reboot; elif [ -e /setup2.sh ]; then sudo bash /setup2.sh $a && sudo rm /setup2.sh && sudo reboot; fi" /mnt/sd/root/etc/rc.local
 echo "$name" | sudo tee /mnt/sd/root/etc/hostname > /dev/null
-sudo sed -i "s/raspberrypi/$name/" /mnt/sd/root/etc/hosts
+sudo sed -i -e "s/raspberrypi/$name/" /mnt/sd/root/etc/hosts
 sudo cp ./setup.sh /mnt/sd/root/
 sudo cp ./setup2.sh /mnt/sd/root/
 
 sleep 1
-sync
+sudo sync
 
 echo "unmounting drives"
 sudo umount /mnt/sd/boot
