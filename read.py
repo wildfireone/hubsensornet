@@ -42,8 +42,10 @@ while db is not None:
         # print('temp={0:0.1f}*C humid={1:0.1f}%'.format(t, h))
         msg1 = [{
             'measurement': 'atmos',
+            'tags': {
+                "host" : gethostname()
+            },
             'fields': {
-                'host': gethostname(),
                 'temp': t,
                 'humi': h
             }
@@ -52,8 +54,10 @@ while db is not None:
     # create json message
     msg = [{
         'measurement': 'usage',
+        'tags': {
+            "host" : gethostname()
+        },
         'fields': {
-            'host': gethostname(),
             'cpu': cpu_percent(),
             'mem': virtual_memory().percent
         }}]
