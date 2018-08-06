@@ -21,8 +21,7 @@ else:
 
 def temp():
     with open('/sys/class/thermal/thermal_zone0/temp') as f:
-        r = f.read()[:2]
-    return r
+        return int(f.read()[:2])
 
 
 db = None
