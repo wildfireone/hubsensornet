@@ -19,6 +19,12 @@ else:
     end = "pihost"
 
 
+def temp():
+    with open('/sys/class/thermal/thermal_zone0/temp') as f:
+        r = f.read()[:2]
+    return r
+
+
 db = None
 while db is None:
     # create db client
@@ -43,9 +49,12 @@ while db is not None:
         msg1 = [{
             'measurement': 'atmos',
             'tags': {
-                "host" : gethostname()
+                "host": gethostname()
             },
             'fields': {
+                'cpu_usage': cpu_percent(),
+                'mem_usage': virtual_memory().percent,
+                'cpu_temp': temp(),
                 'temp': t,
                 'humi': h
             }
@@ -55,11 +64,12 @@ while db is not None:
     msg = [{
         'measurement': 'usage',
         'tags': {
-            "host" : gethostname()
+            "host": gethostname()
         },
         'fields': {
-            'cpu': cpu_percent(),
-            'mem': virtual_memory().percent
+            'cpu_usage': cpu_percent(),
+            'mem_usage': virtual_memory().percent,
+            'cpu_temp': temp()
         }}]
 
     # write to db
