@@ -1,2 +1,4 @@
 *-raspbian-stretch-lite.*
 .vscode/
+node_modules
+*workspace
