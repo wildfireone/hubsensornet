@@ -1,4 +1,14 @@
 #!/bin/sh
+net=false
+while $net ; do
+    wget -q --spider www.google.com
+    if [ $? -eq 1 ]; then
+        echo "no internet waiting 5 then trying again"
+        sleep 5
+    else
+        net=true
+    fi
+done
 
 echo "installing python"
 sudo apt install python3 python3-pip -y
