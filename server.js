@@ -37,7 +37,23 @@ app.get('/data', (req, res) => {
 		});
 
 		r.on('end', () => {
-			res.send(str)
+			str = JSON.parse(str)
+			str = str.results[0].series
+			var d = []
+
+			for (let i in str) {
+				d[i] = {
+					host: str[i].tags.host,
+					time: str[i].values[0][0],
+					cpu_usage: +str[i].values[0][2],
+					mem_usage: +str[i].values[0][4],
+					cpu_temp: +str[i].values[0][1],
+					humi: +str[i].values[0][3],
+					temp: +str[i].values[0][5]
+				}
+			}
+
+			res.send(d)
 		});
 	}).end();
 
