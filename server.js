@@ -19,11 +19,17 @@ app.all('/*', function (req, res, next) {
 
 app.get('/data', (req, res) => {
 	// console.log(req)
+	var time = '1h'
+
+	if (req.query.time) {
+		console.log(req.query.time)
+		time = req.query.time
+	}
 
 	http.request({
 		host: 'localhost',
 		port: '8086',
-		path: '/query?&db=test&q=select%20mean%28%2A%29%20from%20atmos%20where%20time%20%3E%20now%28%29%20-%201m%20group%20by%20host'
+		path: '/query?&db=test&q=select%20mean%28%2A%29%20from%20atmos%20where%20time%20%3E%20now%28%29%20-%20' + time + '%20group%20by%20host'
 	}, (r) => {
 		var str = ''
 		r.on('data', (c) => {
