@@ -22,25 +22,22 @@ var svg = d3.select("body").append("svg")
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 d3.json(
-	"data.json",
+	'http://pihost:3000/data?time=1d',
 	function (error, data) {
-		data = data.results[0].series
-		console.log(data)
-
 		if (error) console.log(error)
 
+		console.log(data)
 
 		// Extract the list of dimensions and create a scale for each.
-		x.domain(dimensions = d3.keys(a.columns).filter(function (d) {
+		x.domain(dimensions = d3.keys(data[0]).filter(function (d) {
 			console.log(d)
-			return d != 0 && (y[d] = d3.scale.linear()
-				.domain(d3.extent(a.values, function (p) {
-					console.log(p[d])
-					return +p[d]
+			return d != "host" && d != "time" && (y[d] = d3.scale.linear()
+				.domain(d3.extent(data, function (p) {
+					console.log(typeof p[d])
+					return +p[d];
 				}))
 				.range([height, 0]));
 		}));
-
 
 		x.domain()
 
@@ -48,7 +45,7 @@ d3.json(
 		background = svg.append("g")
 			.attr("class", "background")
 			.selectAll("path")
-			.data(data.values)
+			.data(data)
 			.enter().append("path")
 			.attr("d", path);
 
@@ -56,7 +53,7 @@ d3.json(
 		foreground = svg.append("g")
 			.attr("class", "foreground")
 			.selectAll("path")
-			.data(data.values)
+			.data(data)
 			.enter().append("path")
 			.attr("d", path);
 
@@ -97,20 +94,20 @@ d3.json(
 function path(d) {
 	return line(dimensions.map(function (p) {
 		return [x(p), y[p](d[p])];
-	}));
+	}))
+};
 
-	// Handles a brush event, toggling the display of foreground lines.
-	function brush() {
-		var actives = dimensions.filter(function (p) {
-				return !y[p].brush.empty();
-			}),
-			extents = actives.map(function (p) {
-				return y[p].brush.extent();
-			});
-		foreground.style("display", function (d) {
-			return actives.every(function (p, i) {
-				return extents[i][0] <= d[p] && d[p] <= extents[i][1];
-			}) ? null : "none";
+// Handles a brush event, toggling the display of foreground lines.
+function brush() {
+	var actives = dimensions.filter(function (p) {
+			return !y[p].brush.empty();
+		}),
+		extents = actives.map(function (p) {
+			return y[p].brush.extent();
 		});
-	}
-}
+	foreground.style("display", function (d) {
+		return actives.every(function (p, i) {
+			return extents[i][0] <= d[p] && d[p] <= extents[i][1];
+		}) ? null : "none";
+	});
+};
