@@ -51,11 +51,11 @@ while db is not None:
                 "host": gethostname()
             },
             'fields': {
-                'cpu_usage': cpu_percent(),
-                'mem_usage': virtual_memory().percent,
+                'cpu_usage': float("%.2f" % cpu_percent()),
+                'mem_usage': float("%.2f" % virtual_memory().percent),
                 'cpu_temp': temp(),
-                'temp': t,
-                'humi': h
+                'temp': float("%.2f" % t),
+                'humi': float("%.2f" % h)
             }
         }]
         db.write_points(msg1)
@@ -66,8 +66,8 @@ while db is not None:
             "host": gethostname()
         },
         'fields': {
-            'cpu_usage': cpu_percent(),
-            'mem_usage': virtual_memory().percent,
+            'cpu_usage': float("%.2f" % cpu_percent()),
+            'mem_usage': float("%.2f" % virtual_memory().percent),
             'cpu_temp': temp()
         }}]
 
