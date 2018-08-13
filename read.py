@@ -43,8 +43,9 @@ while db is not None:
     if s is not None:
         h, t = read_retry(s, p)
 
+    # if the h, t objects exists
     if h is not None and t is not None:
-        # print('temp={0:0.1f}*C humid={1:0.1f}%'.format(t, h))
+        # create a message containing telemetry
         msg1 = [{
             'measurement': 'atmos',
             'tags': {
@@ -73,4 +74,4 @@ while db is not None:
 
     # write to db
     db.write_points(msg)
-    sleep(5)
+    sleep(20)
