@@ -1,1 +1,0 @@
-{"results":[{"statement_id":0,"series":[{"name":"usage","tags":{"host":"pihost"},"columns":["time","mean_cpu","mean_mem"],"values":[["2018-08-02T15:16:11.727020393Z",2.08135593220339,23.68644067796613]]},{"name":"usage","tags":{"host":"pitest1"},"columns":["time","mean_cpu","mean_mem"],"values":[["2018-08-02T15:16:11.727020393Z",1.157142857142857,19.900000000000002]]}]}]}
