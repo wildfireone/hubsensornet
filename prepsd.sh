@@ -4,7 +4,7 @@ if [ "$1" = "1" ]; then
     a=$1
     name="pihost"
     echo "server $name"
-    elif [ "$1" = "0" ]; then
+elif [ "$1" = "0" ]; then
     a=$1
     if [[ "$2" =~ ^[0-9]+$ ]]; then
         name=pitest$2
