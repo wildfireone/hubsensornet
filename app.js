@@ -1,30 +1,31 @@
-const val = document.getElementById('time-increments')
-
-val.addEventListener('change',function() {
-    build(val.value)
-},false)
+document.getElementById('time-increments').addEventListener('change', () => {
+	build(this.value)
+}, false)
 
 function build(time) {
-    console.log(time)
-    const color = (d) => { return d3.scale
-        .linear()
-        .domain([9, 50])
-        .range(["steelblue", "brown"])
-        .interpolate(d3.interpolateLab)(d['time']) }
+	d3.select(document.getElementById('para')).selectAll("*").remove()
 
-    const parcoords = d3
-        .parcoords()('#para')
-        .color(color)
-        .alpha(0.4)
+	const color = (d) => {
+		return d3.scale
+			.linear()
+			.domain([9, 50])
+			.range(["steelblue", "brown"])
+			.interpolate(d3.interpolateLab)(d['time'])
+	}
 
-    d3.json('http://pihost:3000/data?time=' + time, (data) => {
-    parcoords
-        .data(data)
-        .hideAxis(["time", "host"])
-        .composite("darker")
-        .render()
-        .shadows()
-        .reorderable()
-        .brushMode("1D-axes")
-    })
+	const parcoords = d3
+		.parcoords()('#para')
+		.color(color)
+		.alpha(0.4)
+
+	d3.json('http://pihost:3000/data?time=' + time, (data) => {
+		parcoords
+			.data(data)
+			.hideAxis(["time", "host"])
+			.composite("darker")
+			.render()
+			.shadows()
+			.reorderable()
+			.brushMode("1D-axes")
+	})
 }

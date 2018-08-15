@@ -5,6 +5,9 @@
 		width: 800px;
 		height: 300px;
 	}
+	.text {
+		font-family: Verdana, Geneva, Tahoma, sans-serif;
+	}
 </style>
 
 <body onload="build('1h')">
@@ -13,7 +16,7 @@
 	
 	<link rel="stylesheet" type="text/css" href="http://syntagmatic.github.io/parallel-coordinates/d3.parcoords.css">
 
-	<label for="time-increment">How far back:</label>
+	<label class="text" for="time-increment">How far back:</label>
 	<select for="time-increment" id="time-increments">
 		<option value="5m">5m</option>
 		<option value="1h" selected>1h</option>
