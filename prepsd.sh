@@ -3,12 +3,12 @@
 if [ "$1" = "1" ]; then
     a=$1
     name="pihost"
-    echo "server $name"
+    echo -e "\tserver $name"
 elif [ "$1" = "0" ]; then
     a=$1
     if [[ "$2" =~ ^[0-9]+$ ]]; then
         name=pitest$2
-        echo "client $name"
+        echo -e "\tclient $name"
     else
         echo "choose a number for the client pi"
         exit 1
@@ -28,22 +28,22 @@ if [ ! -f 2018-06-27-raspbian-stretch-lite.img ]; then
 fi
 
 
-if ! lsblk | grep -q mmcblk0 ; then
-    echo "no sd card detected"
-    lsblk | grep -e "disk" | grep -v "sda"
-    while [ "$drive" = "" ] ; do
-        read -r -p "Please specify drive: /dev/"
-        if lsblk | grep -e "disk" | grep -e "$REPLY" > /dev/null ; then
-            drive="/dev/$REPLY"
-        else
-            echo "please select an appropriate device"
-        fi
-    done
-else
-    drive="/dev/mmcblk0"
-fi
+lsblk | grep -e "disk" | grep -v "sda"
+while [ "$drive" = "" ] ; do
+    read -r -p "please specify drive: /dev/"
+    if lsblk | grep -e "disk" | grep -e "$REPLY" > /dev/null ; then
+        drive="/dev/$REPLY"
+    else
+        echo "please select an appropriate device"
+    fi
+done
 
-echo "this will erase all data on $drive, are you sure?"
+echo -e "\nplease enter eduroam login details (1493513@rgu.ac.uk)"
+read -p "identity:" uiden
+read -s -p "password:"
+upass="hash:"$(echo -e "hash:" -n $REPLY | iconv -t utf16le | openssl md4 | cut -d ' ' -f 2)
+
+echo "\nthis will erase all data on $drive, are you sure?"
 read -p "Are you sure? " -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     sudo umount $drive $drive\1 $drive\2 $drive\p1 $drive\p2 2> /dev/null
@@ -70,6 +70,8 @@ sleep 1
 echo -e "moving files\\n"
 sudo touch /mnt/sd/boot/ssh
 sudo cp wpa_supplicant.conf /mnt/sd/boot/
+sudo sed -i -e "s/uIDEN/$uiden/" /mnt/sd/boot/wpa_supplicant.conf
+sudo sed -i -e "s/uPASS/$upass/" /mnt/sd/boot/wpa_supplicant.conf
 sudo sed -i "\$iif [ -e /setup.sh ]; then sudo bash /setup.sh $a && sudo rm /setup.sh && sudo reboot; fi" /mnt/sd/root/etc/rc.local
 echo "$name" | sudo tee /mnt/sd/root/etc/hostname > /dev/null
 sudo sed -i -e "s/raspberrypi/$name/" /mnt/sd/root/etc/hosts
