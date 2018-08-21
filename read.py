@@ -19,8 +19,11 @@ def temp():
     with open('/sys/class/thermal/thermal_zone0/temp') as f:
         return int(f.read()[:2])
 
+def log(stat):
+    with open('/tmp/read.py.log', 'w') as f:
+        print >> f, stat
 
-print("searching for database")
+log("searching for database")
 db = None
 while db is None:
     # create db client
@@ -34,7 +37,7 @@ while db is None:
         db = None
         sleep(60)
 
-print("database found sending data")
+log("database found sending data")
 while db is not None:
     h, t = None, None
     if s is not None:
