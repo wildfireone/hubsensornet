@@ -1,5 +1,7 @@
-document.getElementById('time-increments').addEventListener('change', () => {
-	build(this.value)
+const val = document.getElementById('time-increments')
+
+val.addEventListener('change', () => {
+	build(val.value)
 }, false)
 
 function build(time) {
