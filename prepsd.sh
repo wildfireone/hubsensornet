@@ -39,11 +39,11 @@ while [ "$drive" = "" ] ; do
 done
 
 echo -e "\nplease enter eduroam login details (1493513@rgu.ac.uk)"
-read -p "identity:" uiden
-read -s -p "password:"
-upass="hash:"$(echo -e "hash:" -n $REPLY | iconv -t utf16le | openssl md4 | cut -d ' ' -f 2)
+read -p "identity: " uiden
+read -s -p "password: "
+upass="hash:"$(echo -n $REPLY | iconv -t utf16le | openssl md4 | cut -d ' ' -f 2)
 
-echo "\nthis will erase all data on $drive, are you sure?"
+echo -e "\nthis will erase all data on $drive, are you sure?"
 read -p "Are you sure? " -r
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     sudo umount $drive $drive\1 $drive\2 $drive\p1 $drive\p2 2> /dev/null
