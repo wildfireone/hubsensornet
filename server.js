@@ -53,7 +53,6 @@ app.get('/data', (req, res) => {
 			});
 		}).end();
 	} else if ( req.query.type == "val") {
-		console.log(req.query.count)
 		const count = req.query.count ? req.query.count : 1
 		
 		http.request({
