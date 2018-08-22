@@ -1,4 +1,8 @@
+# files
+package-lock.json
 *-raspbian-stretch-lite.*
-.vscode/
+
+# dirs
+.vscode
+_dev
 node_modules
-*workspace
