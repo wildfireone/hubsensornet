@@ -69,13 +69,13 @@ sleep 1
 
 echo -e "moving files\\n"
 sudo touch /mnt/sd/boot/ssh
-sudo cp wpa_supplicant.conf /mnt/sd/boot/
+sudo cp lib/wpa_supplicant.conf /mnt/sd/boot/
 sudo sed -i -e "s/uIDEN/$uiden/" /mnt/sd/boot/wpa_supplicant.conf
 sudo sed -i -e "s/uPASS/$upass/" /mnt/sd/boot/wpa_supplicant.conf
 sudo sed -i "\$iif [ -e /setup.sh ]; then sudo bash /setup.sh $a && sudo rm /setup.sh && sudo reboot; fi" /mnt/sd/root/etc/rc.local
 echo "$name" | sudo tee /mnt/sd/root/etc/hostname > /dev/null
 sudo sed -i -e "s/raspberrypi/$name/" /mnt/sd/root/etc/hosts
-sudo cp ./setup.sh /mnt/sd/root/
+sudo cp lib/setup.sh /mnt/sd/root/
 
 sleep 1
 sudo sync
