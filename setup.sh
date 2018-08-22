@@ -12,7 +12,7 @@ until $net ; do
 done
 
 function client {
-    echo "installing python"
+    echo "installing pip"
     sudo apt install python-pip -y
     sudo pip install --upgrade pip
     echo "installing python libs"
@@ -29,8 +29,8 @@ function server {
     curl -fsSL get.docker.com | sudo sh
     sudo usermod -aG docker pi
 
-    docker create --name pidb --restart=always --network pinet -p 8086:8086 influxdb
-
+    echo "creating pidb container"
+    docker create --name pidb --restart=always -p 8086:8086 influxdb
     docker start pidb
 
     sleep 10
@@ -39,7 +39,7 @@ function server {
 
 if [ "$1" == "0" ]; then
     client
-    elif [ "$1" == "1" ]; then
+elif [ "$1" == "1" ]; then
     server
 fi
 
