@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 from influxdb import InfluxDBClient
 from psutil import cpu_percent, virtual_memory
 from time import sleep
@@ -6,28 +6,28 @@ from socket import gethostname
 from re import search
 
 p, s = None, None
+end, dbname = "pihost", "test"
 
-# determine endpoint based on assumed net topology
-if (gethostname() == "pihost"):
-    end = "localhost"
-elif (search(r'pitest\d', gethostname(), 0)):
-    end = "pihost.local"
+# determine whether we should import adafruit lib
+if (search(r'pitest\d', gethostname(), 0)):
     from Adafruit_DHT import DHT11, read_retry
     s = DHT11
     p = 4
-else:
-    end = "pihost"
 
 
 def temp():
     with open('/sys/class/thermal/thermal_zone0/temp') as f:
         return int(f.read()[:2])
 
+def log(stat):
+    with open('/tmp/read.py.log', 'w') as f:
+        print >> f, stat
 
+log("searching for database")
 db = None
 while db is None:
     # create db client
-    db = InfluxDBClient(host=end, database="test")
+    db = InfluxDBClient(host=end, database=dbname)
     try:
         # if there is no db running on endpoint this will error
         db.get_list_database()
@@ -37,7 +37,7 @@ while db is None:
         db = None
         sleep(60)
 
-print("database found sending data")
+log("database found sending data")
 while db is not None:
     h, t = None, None
     if s is not None:
