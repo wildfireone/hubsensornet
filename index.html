@@ -1,30 +1,42 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-	.parcoords {
-		width: 800px;
-		height: 300px;
-	}
-	.text {
-		font-family: Verdana, Geneva, Tahoma, sans-serif;
-	}
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  p {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 90vh;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 240%;
+  }
+
+  .block {
+    width: 50%;
+    height: 100%;
+    float: left;
+  }
+
+  .left {
+    background-color: darkcyan;
+  }
+
+  .right {
+    background-color: lightgreen
+  }
 </style>
 
-<body onload="build('1h')">
-	<script src="https://d3js.org/d3.v3.min.js"></script>
-	<script src="http://syntagmatic.github.io/parallel-coordinates/d3.parcoords.js"></script>
-	
-	<link rel="stylesheet" type="text/css" href="http://syntagmatic.github.io/parallel-coordinates/d3.parcoords.css">
-
-	<label class="text" for="time-increment">How far back:</label>
-	<select for="time-increment" id="time-increments">
-		<option value="5m">5m</option>
-		<option value="1h" selected>1h</option>
-		<option value="12h">12h</option>
-		<option value="24h">24h</option>
-		<option value="7d">7d</option>
-	</select>
-
-	<div id="para" class="parcoords" ></div>
-	<script src="app.js"></script>
+<body>
+  <a href="lib/parallel.html"><div class="block left">
+      <p>Parallel</p>
+    </div></a>
+  <a href="lib/cube.html"><div class="block right">
+      <p>Cubism</p>
+    </div></a>
 </body>

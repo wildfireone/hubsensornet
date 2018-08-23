@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+	.parcoords {
+		width: 800px;
+		height: 300px;
+	}
+	.text {
+		font-family: Verdana, Geneva, Tahoma, sans-serif;
+	}
+</style>
+
+<body onload="build('1h')">
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<script src="http://syntagmatic.github.io/parallel-coordinates/d3.parcoords.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="http://syntagmatic.github.io/parallel-coordinates/d3.parcoords.css">
+
+	<label class="text" for="time-increment">How far back:</label>
+	<select for="time-increment" id="time-increments">
+		<option value="5m">5m</option>
+		<option value="1h" selected>1h</option>
+		<option value="12h">12h</option>
+		<option value="24h">24h</option>
+		<option value="7d">7d</option>
+	</select>
+
+	<div id="para" class="parcoords" ></div>
+	<script src="parallel.js"></script>
+</body>
