@@ -33,6 +33,19 @@ function server {
     docker create --name pidb --restart=always -p 8086:8086 influxdb
     docker start pidb
 
+    # TODO turn this into a node package
+    echo "getting server files"
+    sudo mkdir /server
+    curl -fsSL https://raw.githubusercontent.com/decantr/hubsensorcode/master/server.js | sude tee /server/server.json > /dev/null
+
+    echo "installing node"
+    # install node
+    echo "install dependencies"
+    # install deps
+
+    echo "adding server to autorun"
+    sudo sed -i '$inode /server/server.js &' /etc/rc.local
+
     sleep 10
     curl -G 'http://localhost:8086/query' --data-urlencode "q=create database test"
 }
