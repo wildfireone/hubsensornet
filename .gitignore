@@ -1,1 +1,6 @@
+# files
+.eslintrc.json
+
+# dirs
 node_modules/
+_dev
