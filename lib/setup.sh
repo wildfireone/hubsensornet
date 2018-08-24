@@ -28,8 +28,9 @@ function server {
 	
 	sleep 30
 
-	echo "installing docker"
-    curl -fsSL get.docker.com | sudo sh
+	echo "intsalling dnsmasq and git"
+	sudo apt install dnsmasq git
+	sudo systemctl start dnsmasq
 
 	sudo touch /setup.sh.log
 	echo "installing docker" | sudo tee -a /setup.sh.log
