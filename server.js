@@ -64,7 +64,7 @@ app.get('/data', (req, res) => {
 			r.on('data', (c) => {
 				str += c;
 			});
-
+			
 			r.on('end', () => {
 				str = JSON.parse(str)
 				str = str.results[0].series
@@ -75,12 +75,12 @@ app.get('/data', (req, res) => {
 					for ( let j in str[i].values ) {
 						d[i][j] = {
 							host: str[i].tags.host,
-							time: str[i].values[0][0],
-							cpu_usage: +str[i].values[0][2],
-							mem_usage: +str[i].values[0][4],
-							cpu_temp: +str[i].values[0][1],
-							humi: +str[i].values[0][3],
-							temp: +str[i].values[0][5]
+							time: str[i].values[j][0],
+							cpu_usage: +str[i].values[j][2],
+							mem_usage: +str[i].values[j][4],
+							cpu_temp: +str[i].values[j][1],
+							humi: +str[i].values[j][3],
+							temp: +str[i].values[j][5]
 						}
 					}
 				}
