@@ -40,7 +40,6 @@ app.get('/data', (req, res) => {
 				for (let i in str) {
 					d[i] = {
 						host: str[i].tags.host,
-						time: str[i].values[0][0],
 						cpu_usage: +str[i].values[0][2],
 						mem_usage: +str[i].values[0][4],
 						cpu_temp: +str[i].values[0][1],
@@ -75,7 +74,6 @@ app.get('/data', (req, res) => {
 					for ( let j in str[i].values ) {
 						d[i][j] = {
 							host: str[i].tags.host,
-							time: str[i].values[j][0],
 							cpu_usage: +str[i].values[j][2],
 							mem_usage: +str[i].values[j][4],
 							cpu_temp: +str[i].values[j][1],
