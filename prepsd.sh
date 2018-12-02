@@ -77,6 +77,13 @@ echo "$name" | sudo tee /mnt/sd/root/etc/hostname > /dev/null
 sudo sed -i -e "s/raspberrypi/$name/" /mnt/sd/root/etc/hosts
 sudo cp lib/setup.sh /mnt/sd/root/
 
+if [ "$1" = "1" ]; then
+  a=$1
+	sudo cp -r lib/server /mnt/sd/root/
+else
+	sudo cp lib/read.py	/mnt/sd/root/
+fi
+
 sleep 1
 sudo sync
 

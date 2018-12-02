@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 from influxdb import InfluxDBClient
 from psutil import cpu_percent, virtual_memory
 from time import sleep

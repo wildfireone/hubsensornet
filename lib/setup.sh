@@ -18,14 +18,12 @@ function client {
 	echo "installing python libs"
 	sudo pip install influxdb psutil Adafruit_DHT
 
-	echo "getting test script"
-	curl -fsSL https://raw.githubusercontent.com/decantr/hubsensorcode/master/read.py | sudo tee /read.py > /dev/null
-	echo "adding test script to autorun"
+	echo "adding read script to autorun"
 	sudo sed -i '$ipython /read.py &' /etc/rc.local
 }
 
 function server {
-	
+
 	sleep 30
 
 	echo "intsalling dnsmasq and git"
@@ -42,16 +40,10 @@ function server {
 	sudo docker create --name pidb --restart=always -p 8086:8086 influxdb
 	sudo docker start pidb
 
-	# TODO turn this into a node package
-	echo "getting server files" | sudo tee -a /setup.sh.log
-	sudo mkdir /server
-	git clone https://github.com/decantr/hubsensorui.git /server 
-	curl -fsSL https://raw.githubusercontent.com/decantr/hubsensorcode/master/server.js | tee /server/server.js > /dev/null
-
 	echo "installing node" | sudo tee -a /setup.sh.log
 	cd /tmp
 	wget https://nodejs.org/dist/v10.8.0/node-v10.8.0-linux-armv7l.tar.xz
-	tar xf node-v10.8.0-linux-armv7l.tar.xz 
+	tar xf node-v10.8.0-linux-armv7l.tar.xz
 	cd node-v10.8.0-linux-armv7l/
 	sudo mv bin/* /bin/
 	sudo mv lib/* /lib/
