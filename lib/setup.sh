@@ -49,12 +49,12 @@ function server {
 	sudo mv lib/* /lib/
 	sudo mv share/* /usr/share/
 
+	sudo chown -R pi:pi /server
+
 	echo "install dependencies" | sudo tee -a /setup.sh.log
 	cd /server
 	npm i -s express http-server
 	cd ~
-
-	sudo chown -R pi:pi /server
 
 	echo "adding server to autorun"
 	sudo sed -i '$inode /server/server.js &' /etc/rc.local

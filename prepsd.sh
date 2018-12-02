@@ -79,7 +79,7 @@ sudo cp lib/setup.sh /mnt/sd/root/
 
 if [ "$1" = "1" ]; then
   a=$1
-	sudo cp -r lib/server /mnt/sd/root/
+	sudo cp -r server /mnt/sd/root/
 else
 	sudo cp lib/read.py	/mnt/sd/root/
 fi
