@@ -2,8 +2,7 @@
 
 net=false
 until $net ; do
-	wget -q --spider www.google.com
-	if [ $? -eq 0 ]; then
+	if wget -q --spider www.google.com ; then
 	  net=true
 	else
 	  echo "no internet waiting 5 before trying again"
@@ -32,7 +31,7 @@ function server {
 
 	sudo touch /setup.sh.log
 	echo "installing docker" | sudo tee -a /setup.sh.log
-	curl -kfsSL get.docker.com | sudo bash > /setup.docker.log
+	curl -kfsSL get.docker.com | sudo bash | sudo tee -a /setup.docker.log
 	echo "docker installed " | sudo tee -a /setup.sh.log
 	sudo usermod -aG docker pi
 
@@ -41,10 +40,10 @@ function server {
 	sudo docker start pidb
 
 	echo "installing node" | sudo tee -a /setup.sh.log
-	cd /tmp
+	cd /tmp || return
 	wget https://nodejs.org/dist/v10.8.0/node-v10.8.0-linux-armv7l.tar.xz
 	tar xf node-v10.8.0-linux-armv7l.tar.xz
-	cd node-v10.8.0-linux-armv7l/
+	cd node-v10.8.0-linux-armv7l/ || echo "ERROR: failed to get node" | sudo tee -a /setup.sh.log && return
 	sudo mv bin/* /bin/
 	sudo mv lib/* /lib/
 	sudo mv share/* /usr/share/
@@ -52,9 +51,9 @@ function server {
 	sudo chown -R pi:pi /server
 
 	echo "install dependencies" | sudo tee -a /setup.sh.log
-	cd /server
+	cd /server || echo "ERROR: server not copied over" | sudo tee -a /setup.sh.log && return
 	npm i -s express http-server
-	cd ~
+	cd ~ || return
 
 	echo "adding server to autorun"
 	sudo sed -i '$inode /server/server.js &' /etc/rc.local
