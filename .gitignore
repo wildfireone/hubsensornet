@@ -6,3 +6,5 @@ package-lock.json
 .vscode
 _dev
 node_modules
+.eslintrc.json
+
